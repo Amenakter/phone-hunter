@@ -1,6 +1,7 @@
-const loadData =async () => {
+const loadData = async () => {
     const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
+  
     const notFound = document.getElementById('no-result') 
     // error handle
     if (searchText=='') {
@@ -8,11 +9,12 @@ const loadData =async () => {
 
     } else {
         const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
-        // console.log(url);
+        console.log(url);
         const res = await fetch(url);
         const data = await res.json();
-        // displayPhone(data.data);
-   console.log(data);
+        
+        displayPhone(data.data);
+    
         // search bar clear
         searchField.value = '';
     }  
@@ -46,6 +48,7 @@ const displayPhone =  phones => {
         });
         // clear error
         notFound.innerText = '';
+        
     } 
 } 
 
@@ -120,29 +123,3 @@ const displayOtherInfo = otherInfo => {
     details.appendChild(info)
 }
 
-const showAll = async() => {
-    const url = `https://openapi.programming-hero.com/api/phones?search=phone`
-    // console.log(url);
-    const res = await fetch(url);
-    const data = await res.json();
-    displayAllPhone(data.data);
-}
-const displayAllPhone = (data) =>{
-    const phoneContainer = document.getElementById('phones')
-    phoneContainer.textContent = '';
-    data.forEach(phone => {
-        const phonesDiv = document.createElement('div');
-        phonesDiv.classList.add('col');
-        phonesDiv.innerHTML = `<div class="card h-100">
-             <img src="${phone.image}" class="card-img-top w-50 align-self-center mt-5" >
-              <div class="card-body">
-              <h5 class="card-title">${phone.phone_name}</h5>
-                <p class="card-text">Brand:${phone.brand}</p>
-                </div>
-                <div class="card-footer">
-                <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
-             </div>
-           </div>` 
-        phoneContainer.appendChild(phonesDiv)
-    });
-}
