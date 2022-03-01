@@ -1,10 +1,8 @@
 const loadData =async () => {
     const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
-    const notFound = document.getElementById('no-result')
-  
-    console.log(notFound);
-    
+    const notFound = document.getElementById('no-result') 
+    // error handle
     if (searchText=='') {
         notFound.innerText = 'Please search valid something'
 
@@ -13,11 +11,11 @@ const loadData =async () => {
         // console.log(url);
         const res = await fetch(url);
         const data = await res.json();
-        displayPhone(data.data);
+        // displayPhone(data.data);
+   console.log(data);
+        // search bar clear
         searchField.value = '';
-    }
-    
-  
+    }  
 }
 
 // display data
@@ -26,12 +24,8 @@ const displayPhone =  phones => {
     const phoneContainer = document.getElementById('phones')
     phoneContainer.textContent = '';
     const notFound = document.getElementById('no-result')
-  
-    // console.log(notFound);
-    
     if (phone20.length == 0) {
         notFound.innerText = 'No Found,Try Again'
-
     }
     else {
         phone20.forEach(phone => {
@@ -47,19 +41,15 @@ const displayPhone =  phones => {
                     <div class="card-footer">
                     <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
                  </div>
-               </div>`
-        
-        
+               </div>` 
             phoneContainer.appendChild(phonesDiv)
         });
+        // clear error
         notFound.innerText = '';
-    }
-
-        
-       
-        
+    } 
 } 
 
+// load phone details
 const phoneDetails = async id => {
     // console.log(id);
     const url = `https://openapi.programming-hero.com/api/phone/${id}`
@@ -69,13 +59,13 @@ const phoneDetails = async id => {
     displayPhoneDetails(data.data);
 }
 
+// diaplay phone details
 const displayPhoneDetails = details => {
     console.log(details);
     const detailContainer = document.getElementById('details');
     detailContainer.textContent=''
     const card = document.createElement('div')
-    card.classList.add('card');
-    
+    card.classList.add('card');  
     card.innerHTML = `        
                 <img src="${details.image}"  class="img card-img-top w-25 align-self-center mt-5">
                 <div class="card-body">
@@ -95,6 +85,8 @@ const displayPhoneDetails = details => {
                      `
     detailContainer.appendChild(card)
 }
+
+// load other info
 const others = async moreInfo => {
     console.log(moreInfo);
     const url = `https://openapi.programming-hero.com/api/phone/${moreInfo}`
@@ -104,6 +96,7 @@ const others = async moreInfo => {
     displayOtherInfo(data.data);
 }
 
+// display others info
 const displayOtherInfo = otherInfo => {
     console.log(otherInfo);
     const details = document.getElementById('moreDetails')
@@ -123,20 +116,33 @@ const displayOtherInfo = otherInfo => {
                   <li class="list-group-item">Bluetooth : ${otherInfo.others.Bluetooth}</li>
                   <h6 class="list-group-item">sensor : ${otherInfo.mainFeatures.sensors}</h6>
                 </ul>
-              </div>
-                 </div>
-                 <div>
-
-                 </div>
-                 
                  `
     details.appendChild(info)
 }
 
 const showAll = async() => {
-    const url = `https://openapi.programming-hero.com/api/phones`
+    const url = `https://openapi.programming-hero.com/api/phones?search=phone`
     // console.log(url);
     const res = await fetch(url);
     const data = await res.json();
-    displayPhone(data.data);
+    displayAllPhone(data.data);
+}
+const displayAllPhone = (data) =>{
+    const phoneContainer = document.getElementById('phones')
+    phoneContainer.textContent = '';
+    data.forEach(phone => {
+        const phonesDiv = document.createElement('div');
+        phonesDiv.classList.add('col');
+        phonesDiv.innerHTML = `<div class="card h-100">
+             <img src="${phone.image}" class="card-img-top w-50 align-self-center mt-5" >
+              <div class="card-body">
+              <h5 class="card-title">${phone.phone_name}</h5>
+                <p class="card-text">Brand:${phone.brand}</p>
+                </div>
+                <div class="card-footer">
+                <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
+             </div>
+           </div>` 
+        phoneContainer.appendChild(phonesDiv)
+    });
 }
