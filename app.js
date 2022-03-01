@@ -9,7 +9,7 @@ const loadData = async () => {
 
     } else {
         const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
-        console.log(url);
+        // console.log(url);
         const res = await fetch(url);
         const data = await res.json();
         displayPhone(data.data);
@@ -63,7 +63,7 @@ const phoneDetails = async id => {
 
 // diaplay phone details
 const displayPhoneDetails = details => {
-    console.log(details);
+    // console.log(details);
     const detailContainer = document.getElementById('details');
     detailContainer.textContent=''
     const card = document.createElement('div')
@@ -72,7 +72,7 @@ const displayPhoneDetails = details => {
                 <img src="${details.image}"  class="img card-img-top w-25 align-self-center mt-5">
                 <div class="card-body">
                   <h5 class="card-title">${details.name}</h5>
-                  <h5 class="card-title">${details.releaseDate? details.releaseDate:'Release Date is Not Found'}</h5>
+                  <h6 class="card-title">${details.releaseDate? details.releaseDate:'Release Date  Not Found'}</h6>
                  </div>
                  <h6>Main Features:</h6>
                 <ul class="list-group list-group-flush">
@@ -90,7 +90,7 @@ const displayPhoneDetails = details => {
 
 // load other info
 const others = async moreInfo => {
-    console.log(moreInfo);
+    // console.log(moreInfo);
     const url = `https://openapi.programming-hero.com/api/phone/${moreInfo}`
     console.log(url);
     const res = await fetch(url);
@@ -99,26 +99,47 @@ const others = async moreInfo => {
 }
 
 // display others info
-const displayOtherInfo = otherInfo => {
-    console.log(otherInfo);
-    const details = document.getElementById('moreDetails')
+const displayOtherInfo = otherInfo => {   
+    const details = document.getElementById('moreDetails') 
     details.textContent = '';
     const info = document.createElement('div')
     info.classList.add('card')
-    info.innerHTML = `
-                 <div class="card-header">
-                 <h5>Others Info</h5>
-                </div>
+    if (otherInfo?.others) {
+        info.innerHTML = `
+                 <div class="card-header"><h5>Others Info</h5></div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">NFC : ${otherInfo.others.NFC}</li>
                   <li class="list-group-item">WLAN: ${otherInfo.others.WLAN}</li>
                   <li class="list-group-item">Radio: ${otherInfo.others.Radio}</li>
                   <li class="list-group-item"> GPS: ${otherInfo.others.GPS}</li>
                   <li class="list-group-item">USB: ${otherInfo.others.USB}</li>
-                  <li class="list-group-item">Bluetooth : ${otherInfo.others.Bluetooth}</li>
-                  <h6 class="list-group-item">sensor : ${otherInfo.mainFeatures.sensors}</h6>
+                  <li class="list-group-item">Bluetooth :${ otherInfo.others.Bluetooth }</li>
+                  <div class="card-header"><h5>Sensors:</h5> </div>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[0]}</li>
+                  <li class="list-group-item">${otherInfo.mainFeatures.sensors[1]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[2]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[3]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[4]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[5]}</li>
+                  
                 </ul>
+                
                  `
+    } else {
+        info.innerHTML = `
+                 <div class="card-header"> <h5>sensor:</h5></div>
+                  <ul class="list-group list-group-flush">
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[0]}</li>
+                  <li class="list-group-item">${otherInfo.mainFeatures.sensors[1]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[2]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[3]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[4]}</li>
+                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[5]}</li>
+                  
+                </ul>`
+    }
+    
+                 
     details.appendChild(info)
 }
 
