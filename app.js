@@ -1,23 +1,40 @@
 const loadData =async () => {
     const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
+    const notFound = document.getElementById('no-result')
+  
+    console.log(notFound);
     
-    const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
-    // console.log(url);
-    const res = await fetch(url);
-    const data = await res.json();
-    displayPhone(data.data);
-    searchField.value = '';
+    if (searchText=='') {
+        notFound.innerText = 'Please search valid something'
+
+    } else {
+        const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
+        // console.log(url);
+        const res = await fetch(url);
+        const data = await res.json();
+        displayPhone(data.data);
+        searchField.value = '';
+    }
+    
+  
 }
 
 // display data
-const displayPhone =  phones => {
-     
+const displayPhone =  phones => {  
     const phone20 = phones.slice(0,20)
     const phoneContainer = document.getElementById('phones')
     phoneContainer.textContent = '';
+    const notFound = document.getElementById('no-result')
+  
+    // console.log(notFound);
+    
+    if (phone20.length == 0) {
+        notFound.innerText = 'No Found,Try Again'
 
-    phone20.forEach(phone => {
+    }
+    else {
+        phone20.forEach(phone => {
             // console.log(phones.slice(0,20))
             const phonesDiv = document.createElement('div');
             phonesDiv.classList.add('col');
@@ -28,13 +45,16 @@ const displayPhone =  phones => {
                     <p class="card-text">Brand:${phone.brand}</p>
                     </div>
                     <div class="card-footer">
-                   <button onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button>
+                    <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
                  </div>
                </div>`
         
         
             phoneContainer.appendChild(phonesDiv)
-     });
+        });
+        notFound.innerText = '';
+    }
+
         
        
         
@@ -56,9 +76,7 @@ const displayPhoneDetails = details => {
     const card = document.createElement('div')
     card.classList.add('card');
     
-    card.innerHTML = `
-                      
-                       
+    card.innerHTML = `        
                 <img src="${details.image}"  class="img card-img-top w-25 align-self-center mt-5">
                 <div class="card-body">
                   <h5 class="card-title">${details.name}</h5>
@@ -73,9 +91,52 @@ const displayPhoneDetails = details => {
                 </ul>
                 <div class="card-body">
                 <a onclick="others('${details.slug}')" class="btn btn-primary">Others info</a>
-                </div>
-
-
+                </div> 
                      `
     detailContainer.appendChild(card)
+}
+const others = async moreInfo => {
+    console.log(moreInfo);
+    const url = `https://openapi.programming-hero.com/api/phone/${moreInfo}`
+    console.log(url);
+    const res = await fetch(url);
+    const data = await res.json();
+    displayOtherInfo(data.data);
+}
+
+const displayOtherInfo = otherInfo => {
+    console.log(otherInfo);
+    const details = document.getElementById('moreDetails')
+    details.textContent = '';
+    const info = document.createElement('div')
+    info.classList.add('card')
+    info.innerHTML = `
+                 <div class="card-header">
+                 <h5>Others Info</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">NFC : ${otherInfo.others.NFC}</li>
+                  <li class="list-group-item">WLAN: ${otherInfo.others.WLAN}</li>
+                  <li class="list-group-item">Radio: ${otherInfo.others.Radio}</li>
+                  <li class="list-group-item"> GPS: ${otherInfo.others.GPS}</li>
+                  <li class="list-group-item">USB: ${otherInfo.others.USB}</li>
+                  <li class="list-group-item">Bluetooth : ${otherInfo.others.Bluetooth}</li>
+                  <h6 class="list-group-item">sensor : ${otherInfo.mainFeatures.sensors}</h6>
+                </ul>
+              </div>
+                 </div>
+                 <div>
+
+                 </div>
+                 
+                 `
+    details.appendChild(info)
+}
+
+const showAll = async() => {
+    const url = `https://openapi.programming-hero.com/api/phones`
+    // console.log(url);
+    const res = await fetch(url);
+    const data = await res.json();
+    displayPhone(data.data);
 }

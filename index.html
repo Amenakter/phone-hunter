@@ -12,9 +12,11 @@
 </head>
 
 <body>
+    <!-- header -->
     <header>
         <h2 class="text-center text-gray m-4">The Phone Communication</h2>
     </header>
+    <!-- search input -->
     <div class="input-group w-50 mx-auto mb-3">
         <input id="search-field" type="text" class="form-control" placeholder="Search here...."
             aria-label="Recipient's username" aria-describedby="button-addon2">
@@ -23,6 +25,11 @@
             <button class="btn btn-info ms-3" onclick="showAll()">Show All</button>
         </div>
     </div>
+
+    <div class="text-center">
+        <span id="no-result" class="text-danger fw-bold"></span>
+    </div>
+
 
     <!-- details -->
     <section style="overflow-x: hidden;">
