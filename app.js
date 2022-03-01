@@ -1,7 +1,6 @@
 const loadData = async () => {
     const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
-  
     const notFound = document.getElementById('no-result') 
     // error handle
     if (searchText=='') {
@@ -27,6 +26,7 @@ const displayPhone =  phones => {
     phoneContainer.textContent = '';
     const notFound = document.getElementById('no-result')
     if (phone20.length == 0) {
+        // error massage
         notFound.innerText = 'No Found,Try Again'
     }
     else {
@@ -112,6 +112,7 @@ const others = async moreInfo => {
 
 // display others info
 const displayOtherInfo = otherInfo => {   
+    // console.log(otherInfo);
     const detail = document.getElementById('moreDetails') 
     detail.textContent = '';
     const info = document.createElement('div')
@@ -134,6 +135,7 @@ const displayOtherInfo = otherInfo => {
                 
                  `
     } else {
+
         info.innerHTML = `
                  <div class="card-header"> <h5>sensor:</h5></div>
                   <ul class="list-group list-group-flush">
