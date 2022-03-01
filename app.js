@@ -8,6 +8,7 @@ const loadData = async () => {
         notFound.innerText = 'Please search valid something'
 
     } else {
+        // data load
         const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
         // console.log(url);
         const res = await fetch(url);
@@ -43,19 +44,22 @@ const displayPhone =  phones => {
                     <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
                  </div>
                </div>` 
+            // append div
             phoneContainer.appendChild(phonesDiv)
+            // When searching new phone item then phone details will be hide
+            const detailContainer = document.getElementById('details');
+           detailContainer.textContent=''
         });
         // clear error
-        notFound.innerText = '';
-        
+        notFound.innerText = '';  
     } 
 } 
 
 // load phone details
 const phoneDetails = async id => {
-    // console.log(id);
+   
     const url = `https://openapi.programming-hero.com/api/phone/${id}`
-    console.log(url);
+    // console.log(url);
     const res = await fetch(url);
     const data = await res.json();
     displayPhoneDetails(data.data);
@@ -63,6 +67,7 @@ const phoneDetails = async id => {
 
 // diaplay phone details
 const displayPhoneDetails = details => {
+  
     // console.log(details);
     const detailContainer = document.getElementById('details');
     detailContainer.textContent=''
@@ -86,22 +91,29 @@ const displayPhoneDetails = details => {
                 </div> 
                      `
     detailContainer.appendChild(card)
+    // When click the details button to show another phone details then previous phone's others info will be hide.
+    const detail = document.getElementById('moreDetails')
+    detail.textContent = ''
 }
 
 // load other info
 const others = async moreInfo => {
+    
+    
     // console.log(moreInfo);
     const url = `https://openapi.programming-hero.com/api/phone/${moreInfo}`
-    console.log(url);
+    // console.log(url);
     const res = await fetch(url);
     const data = await res.json();
+   
     displayOtherInfo(data.data);
+ 
 }
 
 // display others info
 const displayOtherInfo = otherInfo => {   
-    const details = document.getElementById('moreDetails') 
-    details.textContent = '';
+    const detail = document.getElementById('moreDetails') 
+    detail.textContent = '';
     const info = document.createElement('div')
     info.classList.add('card')
     if (otherInfo?.others) {
@@ -115,12 +127,8 @@ const displayOtherInfo = otherInfo => {
                   <li class="list-group-item">USB: ${otherInfo.others.USB}</li>
                   <li class="list-group-item">Bluetooth :${ otherInfo.others.Bluetooth }</li>
                   <div class="card-header"><h5>Sensors:</h5> </div>
-                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[0]}</li>
-                  <li class="list-group-item">${otherInfo.mainFeatures.sensors[1]}</li>
-                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[2]}</li>
-                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[3]}</li>
-                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[4]}</li>
-                  <li class="list-group-item"> ${otherInfo.mainFeatures.sensors[5]}</li>
+                  <li class="list-group-item"> Sensors:${otherInfo.mainFeatures.sensors}</li>
+                  
                   
                 </ul>
                 
@@ -140,6 +148,6 @@ const displayOtherInfo = otherInfo => {
     }
     
                  
-    details.appendChild(info)
+    detail.appendChild(info)
 }
 
