@@ -38,7 +38,7 @@ const displayPhone =  phones => {
                  <img src="${phone.image}" class="card-img-top w-50 align-self-center mt-5" >
                   <div class="card-body">
                   <h5 class="card-title">${phone.phone_name}</h5>
-                    <p class="card-text">Brand:${phone.brand}</p>
+                    <p class="card-text">Brand : ${phone.brand}</p>
                     </div>
                     <div class="card-footer">
                     <a href="#"> <button  onclick="phoneDetails('${phone.slug}')" class="btn btn-success w-100">Details</button></a>
