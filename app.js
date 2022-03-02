@@ -1,11 +1,16 @@
+const searchField = document.getElementById('search-field')
+const notFound = document.getElementById('no-result') 
+const phoneContainer = document.getElementById('phones')
+const detailContainer = document.getElementById('details');
+const detail = document.getElementById('moreDetails')
+
 const loadData = async () => {
-    const searchField = document.getElementById('search-field')
     const searchText = searchField.value;
-    const notFound = document.getElementById('no-result') 
     // error handle
     if (searchText=='') {
         notFound.innerText = 'Please search valid something'
-
+        phoneContainer.textContent = '';
+        detailContainer.textContent=''
     } else {
         // data load
         const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`
@@ -13,21 +18,23 @@ const loadData = async () => {
         const res = await fetch(url);
         const data = await res.json();
         displayPhone(data.data);
-    
         // search bar clear
         searchField.value = '';
     }  
+    // clear other info
+    detail.textContent = '';
 }
 
 // display data
 const displayPhone =  phones => {  
     const phone20 = phones.slice(0,20)
-    const phoneContainer = document.getElementById('phones')
     phoneContainer.textContent = '';
-    const notFound = document.getElementById('no-result')
     if (phone20.length == 0) {
         // error massage
         notFound.innerText = 'No Found,Try Again'
+        phoneContainer.textContent = '';
+        detailContainer.textContent = ''
+        
     }
     else {
         phone20.forEach(phone => {
@@ -47,8 +54,7 @@ const displayPhone =  phones => {
             // append div
             phoneContainer.appendChild(phonesDiv)
             // When searching new phone item then phone details will be hide
-            const detailContainer = document.getElementById('details');
-           detailContainer.textContent=''
+            detailContainer.textContent = '';     
         });
         // clear error
         notFound.innerText = '';  
@@ -67,9 +73,7 @@ const phoneDetails = async id => {
 
 // diaplay phone details
 const displayPhoneDetails = details => {
-  
     // console.log(details);
-    const detailContainer = document.getElementById('details');
     detailContainer.textContent=''
     const card = document.createElement('div')
     card.classList.add('card');  
@@ -92,14 +96,11 @@ const displayPhoneDetails = details => {
                      `
     detailContainer.appendChild(card)
     // When click the details button to show another phone details then previous phone's others info will be hide.
-    const detail = document.getElementById('moreDetails')
     detail.textContent = ''
 }
 
 // load other info
 const others = async moreInfo => {
-    
-    
     // console.log(moreInfo);
     const url = `https://openapi.programming-hero.com/api/phone/${moreInfo}`
     // console.log(url);
@@ -112,8 +113,7 @@ const others = async moreInfo => {
 
 // display others info
 const displayOtherInfo = otherInfo => {   
-    // console.log(otherInfo);
-    const detail = document.getElementById('moreDetails') 
+    // console.log(otherInfo); 
     detail.textContent = '';
     const info = document.createElement('div')
     info.classList.add('card')
@@ -128,7 +128,7 @@ const displayOtherInfo = otherInfo => {
                   <li class="list-group-item">USB: ${otherInfo.others.USB}</li>
                   <li class="list-group-item">Bluetooth :${ otherInfo.others.Bluetooth }</li>
                   <div class="card-header"><h5>Sensors:</h5> </div>
-                  <li class="list-group-item"> Sensors:${otherInfo.mainFeatures.sensors}</li>
+                  <li class="list-group-item"> Sensors:${otherInfo.mainFeatures.sensors.join(" | ")}</li>
                   
                   
                 </ul>
@@ -152,4 +152,3 @@ const displayOtherInfo = otherInfo => {
                  
     detail.appendChild(info)
 }
-
